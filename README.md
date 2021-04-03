@@ -3,7 +3,7 @@
 
 # Movve
 
-Movve is an application that provides you all necessary information to decide whether you are going to like the movie/tv show or not. Apart from breif movie introduction you also get movie recommendations based on similarities to the movie that you have searced up.
+Movve is an application that provides you all necessary information to decide whether you are going to like the movie/tv show or not. Apart from breif movie introduction you also get movie recommendations based on similarities to the movie that you have searched up.
 
 # Screenshots
 
