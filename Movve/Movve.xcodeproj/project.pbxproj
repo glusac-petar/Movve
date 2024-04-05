@@ -71,8 +71,7 @@
 		A63064882BC0119C0004A1CD /* Movve */ = {
 			isa = PBXGroup;
 			children = (
-				A63064A12BC012410004A1CD /* Movie.swift */,
-				A63064A32BC012670004A1CD /* MoviesLoader.swift */,
+				A63064A52BC012A60004A1CD /* Movies Feature */,
 			);
 			path = Movve;
 			sourceTree = "<group>";
@@ -82,6 +81,15 @@
 			children = (
 			);
 			path = MovveTests;
+			sourceTree = "<group>";
+		};
+		A63064A52BC012A60004A1CD /* Movies Feature */ = {
+			isa = PBXGroup;
+			children = (
+				A63064A12BC012410004A1CD /* Movie.swift */,
+				A63064A32BC012670004A1CD /* MoviesLoader.swift */,
+			);
+			path = "Movies Feature";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
