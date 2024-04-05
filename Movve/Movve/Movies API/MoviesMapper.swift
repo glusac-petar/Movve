@@ -24,7 +24,7 @@ final class MoviesMapper {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard response.statusCode == OK_200, let root = try? decoder.decode(Root.self, from: data) else {
-            return .failure(.invalidData)
+            return .failure(RemoteMoviesLoader.Error.invalidData)
         }
         
         let movies = root.results.compactMap { item -> Movie? in

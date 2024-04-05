@@ -13,7 +13,7 @@ public protocol HTTPClient {
     func get(from url: URL, completion: @escaping (Result) -> Void)
 }
 
-public final class RemoteMoviesLoader {
+public final class RemoteMoviesLoader: MoviesLoader {
     private let url: URL
     private let httpClient: HTTPClient
     
@@ -22,7 +22,7 @@ public final class RemoteMoviesLoader {
         case invalidData
     }
     
-    public typealias Result = Swift.Result<[Movie], Error>
+    public typealias Result = MoviesLoader.Result
     
     public init(url: URL, httpClient: HTTPClient) {
         self.url = url
@@ -37,7 +37,7 @@ public final class RemoteMoviesLoader {
             case let .success((data, response)):
                 completion(MoviesMapper.map(data, response))
             case .failure:
-                completion(.failure(.connectivity))
+                completion(.failure(Error.connectivity))
             }
         }
     }
