@@ -72,6 +72,25 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversMoviesOn200HTTPResponseWithJSONList() {
+        let (sut, httpClient) = makeSUT()
+        
+        let movie1 = Movie(id: 1, imagePath: UUID().uuidString)
+        let movie1JSON: [String:Any] = [
+            "id": movie1.id,
+            "poster_path": movie1.imagePath
+        ]
+        let movie2JSON: [String:Any] = [
+            "id": 2
+        ]
+        let moviesJSON = ["results": [movie1JSON, movie2JSON]]
+        
+        expect(sut, toCompleteWith: .success([movie1]), when: {
+            let json = try! JSONSerialization.data(withJSONObject: moviesJSON)
+            httpClient.complete(withStatusCode: 200, data: json)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "https://an-url.com")!) -> (sut: RemoteMoviesLoader, httpClient: HTTPClientSpy) {

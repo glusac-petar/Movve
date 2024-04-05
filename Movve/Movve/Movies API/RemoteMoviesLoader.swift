@@ -33,8 +33,17 @@ public final class RemoteMoviesLoader {
         httpClient.get(from: url) { result in
             switch result {
             case let .success((data, _)):
-                if let _ = try? JSONSerialization.jsonObject(with: data) {
-                    completion(.success([]))
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                
+                if let root = try? decoder.decode(Root.self, from: data) {
+                    let movies = root.results.compactMap { item -> Movie? in
+                        if let imagePath = item.posterPath {
+                            return Movie(id: item.id, imagePath: imagePath)
+                        }
+                        return nil
+                    }
+                    completion(.success(movies))
                 } else {
                     completion(.failure(.invalidData))
                 }
@@ -43,4 +52,13 @@ public final class RemoteMoviesLoader {
             }
         }
     }
+}
+
+private struct Root: Decodable {
+    let results: [Item]
+}
+
+private struct Item: Decodable {
+    let id: Int
+    let posterPath: String?
 }

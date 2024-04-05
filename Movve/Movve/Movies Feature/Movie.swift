@@ -8,6 +8,11 @@
 import Foundation
 
 public struct Movie: Equatable {
-    let id: Int
-    let imagePath: String
+    public let id: Int
+    public let imagePath: String
+    
+    public init(id: Int, imagePath: String) {
+        self.id = id
+        self.imagePath = imagePath
+    }
 }
