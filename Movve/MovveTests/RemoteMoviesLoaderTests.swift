@@ -37,7 +37,7 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, httpClient) = makeSUT()
         
-        expect(sut, toCompleteWithError: .connectivity, when: {
+        expect(sut, toCompleteWith: .failure(.connectivity), when: {
             let clientError = NSError(domain: "any-error", code: 1)
             httpClient.complete(with: clientError)
         })
@@ -48,7 +48,7 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWithError: .invalidData, when: {
+            expect(sut, toCompleteWith: .failure(.invalidData), when: {
                 httpClient.complete(withStatusCode: code, at: index)
             })
         }
@@ -57,7 +57,7 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, httpClient) = makeSUT()
         
-        expect(sut, toCompleteWithError: .invalidData, when: {
+        expect(sut, toCompleteWith: .failure(.invalidData), when: {
             let invalidJSON = Data("invalid-json".utf8)
             httpClient.complete(withStatusCode: 200, data: invalidJSON)
         })
@@ -66,13 +66,10 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     func test_load_deliversNoMoviesOn200HTTPResponseWithEmptyJSONList() {
         let (sut, httpClient) = makeSUT()
         
-        var capturedResults: [RemoteMoviesLoader.Result] = []
-        sut.load { capturedResults.append($0) }
-        
-        let emptyListJSON = Data("{\"results\": []}".utf8)
-        httpClient.complete(withStatusCode: 200, data: emptyListJSON)
-        
-        XCTAssertEqual(capturedResults, [.success([])])
+        expect(sut, toCompleteWith: .success([]), when: {
+            let emptyListJSON = Data("{\"results\": []}".utf8)
+            httpClient.complete(withStatusCode: 200, data: emptyListJSON)
+        })
     }
     
     // MARK: - Helpers
@@ -83,13 +80,13 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         return (sut, httpClient)
     }
     
-    private func expect(_ sut: RemoteMoviesLoader, toCompleteWithError error: RemoteMoviesLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemoteMoviesLoader, toCompleteWith result: RemoteMoviesLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         var capturedResults: [RemoteMoviesLoader.Result] = []
         sut.load { capturedResults.append($0) }
         
         action()
         
-        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
+        XCTAssertEqual(capturedResults, [result], file: file, line: line)
     }
     
     private final class HTTPClientSpy: HTTPClient {
