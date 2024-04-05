@@ -33,20 +33,7 @@ public final class RemoteMoviesLoader {
         httpClient.get(from: url) { result in
             switch result {
             case let .success((data, response)):
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                
-                if response.statusCode == 200, let root = try? decoder.decode(Root.self, from: data) {
-                    let movies = root.results.compactMap { item -> Movie? in
-                        if let imagePath = item.posterPath {
-                            return Movie(id: item.id, imagePath: imagePath)
-                        }
-                        return nil
-                    }
-                    completion(.success(movies))
-                } else {
-                    completion(.failure(.invalidData))
-                }
+                completion(MoviesMapper.map(data, response))
             case .failure:
                 completion(.failure(.connectivity))
             }
@@ -54,11 +41,34 @@ public final class RemoteMoviesLoader {
     }
 }
 
-private struct Root: Decodable {
-    let results: [Item]
+final class MoviesMapper {
+    private struct Root: Decodable {
+        let results: [Item]
+    }
+
+    private struct Item: Decodable {
+        let id: Int
+        let posterPath: String?
+    }
+    
+    private static let OK_200 = 200
+    
+    static func map(_ data: Data, _ response: HTTPURLResponse) -> RemoteMoviesLoader.Result {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        guard response.statusCode == OK_200, let root = try? decoder.decode(Root.self, from: data) else {
+            return .failure(.invalidData)
+        }
+        
+        let movies = root.results.compactMap { item -> Movie? in
+            if let imagePath = item.posterPath {
+                return Movie(id: item.id, imagePath: imagePath)
+            }
+            return nil
+        }
+        return .success(movies)
+    }
 }
 
-private struct Item: Decodable {
-    let id: Int
-    let posterPath: String?
-}
+
