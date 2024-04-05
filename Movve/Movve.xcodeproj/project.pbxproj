@@ -12,6 +12,7 @@
 		A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A32BC012670004A1CD /* MoviesLoader.swift */; };
 		A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */; };
 		A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */; };
+		A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064AB2BC02A460004A1CD /* MoviesMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 		A63064A32BC012670004A1CD /* MoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoader.swift; sourceTree = "<group>"; };
 		A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMoviesLoaderTests.swift; sourceTree = "<group>"; };
 		A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMoviesLoader.swift; sourceTree = "<group>"; };
+		A63064AB2BC02A460004A1CD /* MoviesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */,
+				A63064AB2BC02A460004A1CD /* MoviesMapper.swift */,
 			);
 			path = "Movies API";
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A63064A22BC012410004A1CD /* Movie.swift in Sources */,
+				A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */,
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
 				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
 			);
