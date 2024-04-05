@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A63064982BC011A50004A1CD /* Movve.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A63064862BC0119C0004A1CD /* Movve.framework */; };
+		A63064A22BC012410004A1CD /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A12BC012410004A1CD /* Movie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +25,7 @@
 		A63064862BC0119C0004A1CD /* Movve.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Movve.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A63064942BC011A50004A1CD /* MovveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A630649E2BC011B60004A1CD /* Movve.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Movve.xctestplan; sourceTree = "<group>"; };
+		A63064A12BC012410004A1CD /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 		A63064882BC0119C0004A1CD /* Movve */ = {
 			isa = PBXGroup;
 			children = (
+				A63064A12BC012410004A1CD /* Movie.swift */,
 			);
 			path = Movve;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 				TargetAttributes = {
 					A63064852BC0119C0004A1CD = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 1520;
 					};
 					A63064932BC011A50004A1CD = {
 						CreatedOnToolsVersion = 15.2;
@@ -187,6 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A63064A22BC012410004A1CD /* Movie.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +340,7 @@
 		A630648E2BC0119C0004A1CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -358,6 +364,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -365,6 +372,7 @@
 		A630648F2BC0119C0004A1CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -395,6 +403,7 @@
 		A630649C2BC011A50004A1CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -411,6 +420,7 @@
 		A630649D2BC011A50004A1CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
