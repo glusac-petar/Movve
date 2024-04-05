@@ -67,7 +67,7 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let (sut, httpClient) = makeSUT()
         
         expect(sut, toCompleteWith: .success([]), when: {
-            let emptyListJSON = Data("{\"results\": []}".utf8)
+            let emptyListJSON = makeMoviesJSON([])
             httpClient.complete(withStatusCode: 200, data: emptyListJSON)
         })
     }
@@ -76,17 +76,11 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let (sut, httpClient) = makeSUT()
         
         let movie1 = Movie(id: 1, imagePath: UUID().uuidString)
-        let movie1JSON: [String:Any] = [
-            "id": movie1.id,
-            "poster_path": movie1.imagePath
-        ]
-        let movie2JSON: [String:Any] = [
-            "id": 2
-        ]
-        let moviesJSON = ["results": [movie1JSON, movie2JSON]]
+        let movie1JSON: [String:Any] = ["id": movie1.id, "poster_path": movie1.imagePath]
+        let movie2JSON: [String:Any] = ["id": 2]
         
         expect(sut, toCompleteWith: .success([movie1]), when: {
-            let json = try! JSONSerialization.data(withJSONObject: moviesJSON)
+            let json = makeMoviesJSON([movie1JSON, movie2JSON])
             httpClient.complete(withStatusCode: 200, data: json)
         })
     }
@@ -97,6 +91,11 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let httpClient = HTTPClientSpy()
         let sut = RemoteMoviesLoader(url: url, httpClient: httpClient)
         return (sut, httpClient)
+    }
+    
+    private func makeMoviesJSON(_ movies: [[String:Any]]) -> Data {
+        let moviesJSON = ["results": movies]
+        return try! JSONSerialization.data(withJSONObject: moviesJSON)
     }
     
     private func expect(_ sut: RemoteMoviesLoader, toCompleteWith result: RemoteMoviesLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
