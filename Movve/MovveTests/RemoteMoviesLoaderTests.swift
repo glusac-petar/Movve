@@ -88,9 +88,11 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "https://an-url.com")!) -> (sut: RemoteMoviesLoader, httpClient: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "https://an-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteMoviesLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = RemoteMoviesLoader(url: url, httpClient: httpClient)
+        trackForMemoryLeaks(httpClient, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, httpClient)
     }
     
@@ -106,6 +108,12 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         action()
         
         XCTAssertEqual(capturedResults, [result], file: file, line: line)
+    }
+    
+    private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
     
     private final class HTTPClientSpy: HTTPClient {
