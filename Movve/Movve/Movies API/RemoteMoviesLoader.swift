@@ -32,11 +32,11 @@ public final class RemoteMoviesLoader {
     public func load(completion: @escaping (Result) -> Void) {
         httpClient.get(from: url) { result in
             switch result {
-            case let .success((data, _)):
+            case let .success((data, response)):
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 
-                if let root = try? decoder.decode(Root.self, from: data) {
+                if response.statusCode == 200, let root = try? decoder.decode(Root.self, from: data) {
                     let movies = root.results.compactMap { item -> Movie? in
                         if let imagePath = item.posterPath {
                             return Movie(id: item.id, imagePath: imagePath)

@@ -49,7 +49,8 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: .failure(.invalidData), when: {
-                httpClient.complete(withStatusCode: code, at: index)
+                let json = makeMoviesJSON([])
+                httpClient.complete(withStatusCode: code, data: json, at: index)
             })
         }
     }
@@ -121,7 +122,7 @@ final class RemoteMoviesLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
             let response = HTTPURLResponse(
                 url: requestedURLs[index],
                 statusCode: code,
