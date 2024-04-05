@@ -37,13 +37,10 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, httpClient) = makeSUT()
         
-        var capturedErrors: [RemoteMoviesLoader.Error] = []
-        sut.load { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "any-error", code: 1)
-        httpClient.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity, when: {
+            let clientError = NSError(domain: "any-error", code: 1)
+            httpClient.complete(with: clientError)
+        })
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
@@ -51,12 +48,9 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            var capturedErrors: [RemoteMoviesLoader.Error] = []
-            sut.load { capturedErrors.append($0) }
-            
-            httpClient.complete(withStatusCode: code, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.invalidData])
+            expect(sut, toCompleteWithError: .invalidData, when: {
+                httpClient.complete(withStatusCode: code, at: index)
+            })
         }
     }
     
@@ -66,6 +60,15 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         let httpClient = HTTPClientSpy()
         let sut = RemoteMoviesLoader(url: url, httpClient: httpClient)
         return (sut, httpClient)
+    }
+    
+    private func expect(_ sut: RemoteMoviesLoader, toCompleteWithError error: RemoteMoviesLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        var capturedErrors: [RemoteMoviesLoader.Error] = []
+        sut.load { capturedErrors.append($0) }
+        
+        action()
+        
+        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
     }
     
     private final class HTTPClientSpy: HTTPClient {
