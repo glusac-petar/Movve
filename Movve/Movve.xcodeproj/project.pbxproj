@@ -10,6 +10,7 @@
 		A63064982BC011A50004A1CD /* Movve.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A63064862BC0119C0004A1CD /* Movve.framework */; };
 		A63064A22BC012410004A1CD /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A12BC012410004A1CD /* Movie.swift */; };
 		A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A32BC012670004A1CD /* MoviesLoader.swift */; };
+		A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 		A630649E2BC011B60004A1CD /* Movve.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Movve.xctestplan; sourceTree = "<group>"; };
 		A63064A12BC012410004A1CD /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		A63064A32BC012670004A1CD /* MoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoader.swift; sourceTree = "<group>"; };
+		A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMoviesLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		A63064952BC011A50004A1CD /* MovveTests */ = {
 			isa = PBXGroup;
 			children = (
+				A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */,
 			);
 			path = MovveTests;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
