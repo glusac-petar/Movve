@@ -30,7 +30,9 @@ public final class RemoteMoviesLoader {
     }
     
     public func load(completion: @escaping (Result) -> Void) {
-        httpClient.get(from: url) { result in
+        httpClient.get(from: url) { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success((data, response)):
                 completion(MoviesMapper.map(data, response))
