@@ -7,17 +7,46 @@
 
 import XCTest
 
-class RemoteMoviesLoader {}
+class RemoteMoviesLoader {
+    private let httpClient: HTTPClient
+    
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+    }
+    
+    func load() {
+        httpClient.get(from: URL(string: "https://an-url.com")!)
+    }
+}
 
-class HTTPClient {
-    var requestedURL: URL?
+protocol HTTPClient {
+    func get(from url: URL)
 }
 
 final class RemoteMoviesLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromURL() {
-        let httpClient = HTTPClient()
-        let _ = RemoteMoviesLoader()
+        let httpClient = HTTPClientSpy()
+        let _ = RemoteMoviesLoader(httpClient: httpClient)
         
         XCTAssertNil(httpClient.requestedURL)
+    }
+    
+    func test_load_requestsDataFromURL() {
+        let httpClient = HTTPClientSpy()
+        let sut = RemoteMoviesLoader(httpClient: httpClient)
+        
+        sut.load()
+        
+        XCTAssertNotNil(httpClient.requestedURL)
+    }
+    
+    // MARK: - Helpers
+    
+    private final class HTTPClientSpy: HTTPClient {
+        private(set) var requestedURL: URL?
+        
+        func get(from url: URL) {
+            requestedURL = url
+        }
     }
 }
