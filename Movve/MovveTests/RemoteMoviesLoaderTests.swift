@@ -37,13 +37,13 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, httpClient) = makeSUT()
         
-        var capturedError: RemoteMoviesLoader.Error?
-        sut.load { capturedError = $0 }
+        var capturedErrors: [RemoteMoviesLoader.Error] = []
+        sut.load { capturedErrors.append($0) }
         
         let clientError = NSError(domain: "any-error", code: 1)
         httpClient.complete(with: clientError)
         
-        XCTAssertEqual(capturedError, .connectivity)
+        XCTAssertEqual(capturedErrors, [.connectivity])
     }
     
     // MARK: - Helpers
