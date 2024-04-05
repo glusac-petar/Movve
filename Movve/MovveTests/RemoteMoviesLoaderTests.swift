@@ -6,24 +6,7 @@
 //
 
 import XCTest
-
-class RemoteMoviesLoader {
-    private let url: URL
-    private let httpClient: HTTPClient
-    
-    init(url: URL, httpClient: HTTPClient) {
-        self.url = url
-        self.httpClient = httpClient
-    }
-    
-    func load() {
-        httpClient.get(from: url)
-    }
-}
-
-protocol HTTPClient {
-    func get(from url: URL)
-}
+import Movve
 
 final class RemoteMoviesLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromURL() {

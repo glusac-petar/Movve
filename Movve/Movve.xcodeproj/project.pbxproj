@@ -11,6 +11,7 @@
 		A63064A22BC012410004A1CD /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A12BC012410004A1CD /* Movie.swift */; };
 		A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A32BC012670004A1CD /* MoviesLoader.swift */; };
 		A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */; };
+		A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +31,7 @@
 		A63064A12BC012410004A1CD /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		A63064A32BC012670004A1CD /* MoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoader.swift; sourceTree = "<group>"; };
 		A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMoviesLoaderTests.swift; sourceTree = "<group>"; };
+		A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMoviesLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				A63064A52BC012A60004A1CD /* Movies Feature */,
+				A63064A82BC0178D0004A1CD /* Movies API */,
 			);
 			path = Movve;
 			sourceTree = "<group>";
@@ -93,6 +96,14 @@
 				A63064A32BC012670004A1CD /* MoviesLoader.swift */,
 			);
 			path = "Movies Feature";
+			sourceTree = "<group>";
+		};
+		A63064A82BC0178D0004A1CD /* Movies API */ = {
+			isa = PBXGroup;
+			children = (
+				A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */,
+			);
+			path = "Movies API";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +218,7 @@
 			files = (
 				A63064A22BC012410004A1CD /* Movie.swift in Sources */,
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
+				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
