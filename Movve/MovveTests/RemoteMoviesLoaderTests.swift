@@ -63,6 +63,18 @@ final class RemoteMoviesLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversNoMoviesOn200HTTPResponseWithEmptyJSONList() {
+        let (sut, httpClient) = makeSUT()
+        
+        var capturedResults: [RemoteMoviesLoader.Result] = []
+        sut.load { capturedResults.append($0) }
+        
+        let emptyListJSON = Data("{\"results\": []}".utf8)
+        httpClient.complete(withStatusCode: 200, data: emptyListJSON)
+        
+        XCTAssertEqual(capturedResults, [.success([])])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "https://an-url.com")!) -> (sut: RemoteMoviesLoader, httpClient: HTTPClientSpy) {
