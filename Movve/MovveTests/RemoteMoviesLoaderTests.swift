@@ -27,17 +27,14 @@ protocol HTTPClient {
 
 final class RemoteMoviesLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromURL() {
-        let url = URL(string: "https:/a-given-url.com")!
-        let httpClient = HTTPClientSpy()
-        let _ = RemoteMoviesLoader(url: url, httpClient: httpClient)
+        let (_, httpClient) = makeSUT()
         
         XCTAssertNil(httpClient.requestedURL)
     }
     
     func test_load_requestsDataFromURL() {
         let url = URL(string: "https://a-given-url.com")!
-        let httpClient = HTTPClientSpy()
-        let sut = RemoteMoviesLoader(url: url, httpClient: httpClient)
+        let (sut, httpClient) = makeSUT(url: url)
         
         sut.load()
         
@@ -45,6 +42,12 @@ final class RemoteMoviesLoaderTests: XCTestCase {
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(url: URL = URL(string: "https://an-url.com")!) -> (sut: RemoteMoviesLoader, httpClient: HTTPClientSpy) {
+        let httpClient = HTTPClientSpy()
+        let sut = RemoteMoviesLoader(url: url, httpClient: httpClient)
+        return (sut, httpClient)
+    }
     
     private final class HTTPClientSpy: HTTPClient {
         private(set) var requestedURL: URL?
