@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie {
+public struct Movie: Equatable {
     let id: Int
     let imagePath: String
 }
