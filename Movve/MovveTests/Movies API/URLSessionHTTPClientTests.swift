@@ -35,7 +35,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     func test_getFromURL_failsOnRequestError() {
         let error = NSError(domain: "any-error", code: 1)
-        URLProtocolStub.stub(error: error)
+        URLProtocolStub.stub(data: nil, response: nil, error: error)
         
         let exp = expectation(description: "Wait for completion")
         makeSUT().get(from: anyURL()) { result in
@@ -69,11 +69,13 @@ final class URLSessionHTTPClientTests: XCTestCase {
         private static var requestObserver: ((URLRequest) -> Void)?
         
         private struct Stub {
+            let data: Data?
+            let response: URLResponse?
             let error: Error?
         }
         
-        static func stub(error: Error?) {
-            stub = Stub(error: error)
+        static func stub(data: Data?, response: URLResponse?, error: Error?) {
+            stub = Stub(data: data, response: response, error: error)
         }
         
         static func observeRequest(_ observer: @escaping (URLRequest) -> Void) {
@@ -101,6 +103,14 @@ final class URLSessionHTTPClientTests: XCTestCase {
             if let requestObserver = URLProtocolStub.requestObserver {
                 client?.urlProtocolDidFinishLoading(self)
                 return requestObserver(request)
+            }
+            
+            if let data = URLProtocolStub.stub?.data {
+                client?.urlProtocol(self, didLoad: data)
+            }
+            
+            if let response = URLProtocolStub.stub?.response {
+                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             }
             
             if let error = URLProtocolStub.stub?.error {
