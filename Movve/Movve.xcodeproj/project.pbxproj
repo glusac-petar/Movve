@@ -16,6 +16,7 @@
 		A63064AE2BC031710004A1CD /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064AD2BC031710004A1CD /* HTTPClient.swift */; };
 		A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */; };
 		A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */; };
+		A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		A63064AD2BC031710004A1CD /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
+		A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				A63064A92BC017A10004A1CD /* RemoteMoviesLoader.swift */,
 				A63064AB2BC02A460004A1CD /* MoviesMapper.swift */,
 				A63064AD2BC031710004A1CD /* HTTPClient.swift */,
+				A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */,
 			);
 			path = "Movies API";
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */,
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
 				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
+				A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
