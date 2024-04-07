@@ -15,6 +15,7 @@
 		A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064AB2BC02A460004A1CD /* MoviesMapper.swift */; };
 		A63064AE2BC031710004A1CD /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63064AD2BC031710004A1CD /* HTTPClient.swift */; };
 		A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */; };
+		A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		A63064AB2BC02A460004A1CD /* MoviesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesMapper.swift; sourceTree = "<group>"; };
 		A63064AD2BC031710004A1CD /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
+		A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,10 +119,19 @@
 		A63064AF2BC0319A0004A1CD /* Movies API */ = {
 			isa = PBXGroup;
 			children = (
+				A6462BAC2BC347450094570D /* Helpers */,
 				A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */,
 				A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */,
 			);
 			path = "Movies API";
+			sourceTree = "<group>";
+		};
+		A6462BAC2BC347450094570D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,6 +258,7 @@
 			files = (
 				A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */,
 				A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */,
+				A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
