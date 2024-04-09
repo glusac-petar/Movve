@@ -19,11 +19,11 @@ public final class LocalMoviesLoader {
     }
     
     public func save(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedMovies { [weak self] deletionError in
+        store.deleteCachedMovies { [weak self] error in
             guard let self = self else { return }
             
-            if let deletionError = deletionError {
-                completion(deletionError)
+            if let error = error {
+                completion(error)
             } else {
                 self.cache(movies, with: completion)
             }
