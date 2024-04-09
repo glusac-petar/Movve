@@ -46,9 +46,11 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT() -> (sut: LocalMoviesLoader, store: MoviesStore) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStore) {
         let store = MoviesStore()
         let sut = LocalMoviesLoader(store: store)
+        trackForMemoryLeaks(store, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
     }
     
