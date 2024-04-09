@@ -22,9 +22,14 @@ class LocalMoviesLoader {
 
 class MoviesStore {
     var deleteCachedMoviesCallCount = 0
+    var insertCallCount = 0
     
     func deleteCachedMovies() {
         deleteCachedMoviesCallCount += 1
+    }
+    
+    func completeDeletion(with error: NSError, at index: Int = 0) {
+        
     }
 }
 
@@ -44,6 +49,17 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertEqual(store.deleteCachedMoviesCallCount, 1)
     }
     
+    func test_save_doesNotRequestCacheInsertionOnDeletionError() {
+        let (sut, store) = makeSUT()
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let deletionError = anyNSError()
+        
+        sut.save(movies)
+        store.completeDeletion(with: deletionError)
+        
+        XCTAssertEqual(store.insertCallCount, 0)
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStore) {
@@ -56,5 +72,9 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     private func uniqueMovie() -> Movie {
         return Movie(id: 0, imagePath: UUID().uuidString)
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any-error", code: 1)
     }
 }
