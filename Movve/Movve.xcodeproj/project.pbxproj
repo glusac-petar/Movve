@@ -96,6 +96,7 @@
 		A63064952BC011A50004A1CD /* MovveTests */ = {
 			isa = PBXGroup;
 			children = (
+				A6462BAC2BC347450094570D /* Helpers */,
 				A65EC6942BC561B800A794A0 /* Movies Cache */,
 				A63064AF2BC0319A0004A1CD /* Movies API */,
 			);
@@ -125,7 +126,6 @@
 		A63064AF2BC0319A0004A1CD /* Movies API */ = {
 			isa = PBXGroup;
 			children = (
-				A6462BAC2BC347450094570D /* Helpers */,
 				A63064A62BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift */,
 				A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */,
 			);
