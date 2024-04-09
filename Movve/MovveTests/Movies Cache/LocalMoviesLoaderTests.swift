@@ -30,7 +30,6 @@ class MoviesStore {
     typealias DeletionCompletion = (Error?) -> Void
     
     var deleteCachedMoviesCallCount = 0
-    var insertCallCount = 0
     var insertions: [(movies: [Movie], timestamp: Date)] = []
     
     private var deletionCompletions: [DeletionCompletion] = []
@@ -49,7 +48,6 @@ class MoviesStore {
     }
     
     func insert(_ movies: [Movie], timestamp: Date) {
-        insertCallCount += 1
         insertions.append((movies, timestamp))
     }
 }
@@ -78,17 +76,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         sut.save(movies)
         store.completeDeletion(with: deletionError)
         
-        XCTAssertEqual(store.insertCallCount, 0)
-    }
-    
-    func test_save_requestNewCacheInsertionOnSuccessfulDeletion() {
-        let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
-        
-        sut.save(movies)
-        store.completeDeletionSuccessfuly()
-        
-        XCTAssertEqual(store.insertCallCount, 1)
+        XCTAssertEqual(store.insertions.count, 0)
     }
     
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
