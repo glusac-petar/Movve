@@ -28,45 +28,12 @@ class LocalMoviesLoader {
     }
 }
 
-class MoviesStore {
+protocol MoviesStore {
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
     
-    private var deletionCompletions: [DeletionCompletion] = []
-    private var insertionCompletions: [InsertionCompletion] = []
-    
-    private(set) var receivedMessages: [ReceivedMessage] = []
-    
-    enum ReceivedMessage: Equatable {
-        case deleteCache
-        case insert([Movie], Date)
-    }
-    
-    func deleteCachedMovies(completion: @escaping DeletionCompletion) {
-        receivedMessages.append(.deleteCache)
-        deletionCompletions.append(completion)
-    }
-    
-    func completeDeletion(with error: NSError, at index: Int = 0) {
-        deletionCompletions[index](error)
-    }
-    
-    func completeDeletionSuccessfully(at index: Int = 0) {
-        deletionCompletions[index](nil)
-    }
-    
-    func insert(_ movies: [Movie], timestamp: Date, completion: @escaping (Error?) -> Void) {
-        receivedMessages.append(.insert(movies, timestamp))
-        insertionCompletions.append(completion)
-    }
-    
-    func completeInsertion(with error: NSError, at index: Int = 0) {
-        insertionCompletions[index](error)
-    }
-    
-    func completeInsertionSuccessfully(at index: Int = 0) {
-        insertionCompletions[index](nil)
-    }
+    func deleteCachedMovies(completion: @escaping DeletionCompletion)
+    func insert(_ movies: [Movie], timestamp: Date, completion: @escaping InsertionCompletion)
 }
 
 final class LocalMoviesLoaderTests: XCTestCase {
@@ -137,8 +104,8 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     // MARK: - Helper
     
-    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStore) {
-        let store = MoviesStore()
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
+        let store = MoviesStoreSpy()
         let sut = LocalMoviesLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
@@ -153,6 +120,44 @@ final class LocalMoviesLoaderTests: XCTestCase {
         }
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private final class MoviesStoreSpy: MoviesStore {
+        private var deletionCompletions: [DeletionCompletion] = []
+        private var insertionCompletions: [InsertionCompletion] = []
+        
+        private(set) var receivedMessages: [ReceivedMessage] = []
+        
+        enum ReceivedMessage: Equatable {
+            case deleteCache
+            case insert([Movie], Date)
+        }
+        
+        func deleteCachedMovies(completion: @escaping DeletionCompletion) {
+            receivedMessages.append(.deleteCache)
+            deletionCompletions.append(completion)
+        }
+        
+        func completeDeletion(with error: Error, at index: Int = 0) {
+            deletionCompletions[index](error)
+        }
+        
+        func completeDeletionSuccessfully(at index: Int = 0) {
+            deletionCompletions[index](nil)
+        }
+        
+        func insert(_ movies: [Movie], timestamp: Date, completion: @escaping InsertionCompletion) {
+            receivedMessages.append(.insert(movies, timestamp))
+            insertionCompletions.append(completion)
+        }
+        
+        func completeInsertion(with error: Error, at index: Int = 0) {
+            insertionCompletions[index](error)
+        }
+        
+        func completeInsertionSuccessfully(at index: Int = 0) {
+            insertionCompletions[index](nil)
+        }
     }
     
     private func uniqueMovie() -> Movie {
