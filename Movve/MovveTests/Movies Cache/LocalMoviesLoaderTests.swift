@@ -63,6 +63,10 @@ class MoviesStore {
     func completeInsertion(with error: NSError, at index: Int = 0) {
         insertionCompletions[index](error)
     }
+    
+    func completeInsertionSuccessfuly(at index: Int = 0) {
+        insertionCompletions[index](nil)
+    }
 }
 
 final class LocalMoviesLoaderTests: XCTestCase {
@@ -138,6 +142,24 @@ final class LocalMoviesLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         
         XCTAssertEqual(receivedError as? NSError, insertionError)
+    }
+    
+    func test_save_succeedsOnSuccessfulCacheInsertion() {
+        let (sut, store) = makeSUT()
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let exp = expectation(description: "Wait for completion")
+        
+        var receivedError: Error?
+        sut.save(movies) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        
+        store.completeDeletionSuccessfuly()
+        store.completeInsertionSuccessfuly()
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertNil(receivedError)
     }
     
     // MARK: - Helper
