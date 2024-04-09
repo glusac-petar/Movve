@@ -19,6 +19,7 @@
 		A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */; };
 		A65EC6982BC561ED00A794A0 /* LocalMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */; };
 		A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */; };
+		A65EC69D2BC57A7700A794A0 /* MoviesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoaderTests.swift; sourceTree = "<group>"; };
 		A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoader.swift; sourceTree = "<group>"; };
+		A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */,
+				A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */,
 			);
 			path = "Movies Cache";
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				A63064AE2BC031710004A1CD /* HTTPClient.swift in Sources */,
 				A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */,
 				A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */,
+				A65EC69D2BC57A7700A794A0 /* MoviesStore.swift in Sources */,
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
 				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
 				A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */,
