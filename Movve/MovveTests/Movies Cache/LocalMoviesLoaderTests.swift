@@ -109,57 +109,30 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     func test_save_failsOnDeletionError() {
         let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
         let deletionError = anyNSError()
-        let exp = expectation(description: "Wait for completion")
         
-        var receivedError: Error?
-        sut.save(movies) { error in
-            receivedError = error
-            exp.fulfill()
-        }
-        
-        store.completeDeletion(with: deletionError)
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertEqual(receivedError as? NSError, deletionError)
+        expect(sut, toCompleteWithError: deletionError, when: {
+            store.completeDeletion(with: deletionError)
+        })
     }
     
     func test_save_failsOnInsertionError() {
         let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
         let insertionError = anyNSError()
-        let exp = expectation(description: "Wait for completion")
         
-        var receivedError: Error?
-        sut.save(movies) { error in
-            receivedError = error
-            exp.fulfill()
-        }
-        
-        store.completeDeletionSuccessfuly()
-        store.completeInsertion(with: insertionError)
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertEqual(receivedError as? NSError, insertionError)
+        expect(sut, toCompleteWithError: insertionError, when: {
+            store.completeDeletionSuccessfuly()
+            store.completeInsertion(with: insertionError)
+        })
     }
     
     func test_save_succeedsOnSuccessfulCacheInsertion() {
         let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
-        let exp = expectation(description: "Wait for completion")
         
-        var receivedError: Error?
-        sut.save(movies) { error in
-            receivedError = error
-            exp.fulfill()
-        }
-        
-        store.completeDeletionSuccessfuly()
-        store.completeInsertionSuccessfuly()
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertNil(receivedError)
+        expect(sut, toCompleteWithError: nil, when: {
+            store.completeDeletionSuccessfuly()
+            store.completeInsertionSuccessfuly()
+        })
     }
     
     // MARK: - Helper
@@ -170,6 +143,16 @@ final class LocalMoviesLoaderTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
+    }
+    
+    private func expect(_ sut: LocalMoviesLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let exp = expectation(description: "Wait for completion")
+        sut.save([uniqueMovie()]) { error in
+            XCTAssertEqual(error as? NSError, expectedError, file: file, line: line)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
     }
     
     private func uniqueMovie() -> Movie {
