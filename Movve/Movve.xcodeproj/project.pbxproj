@@ -18,6 +18,7 @@
 		A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */; };
 		A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */; };
 		A65EC6982BC561ED00A794A0 /* LocalMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */; };
+		A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoaderTests.swift; sourceTree = "<group>"; };
+		A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				A63064A52BC012A60004A1CD /* Movies Feature */,
+				A65EC6992BC57A0F00A794A0 /* Movies Cache */,
 				A63064A82BC0178D0004A1CD /* Movies API */,
 			);
 			path = Movve;
@@ -144,6 +147,14 @@
 			isa = PBXGroup;
 			children = (
 				A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */,
+			);
+			path = "Movies Cache";
+			sourceTree = "<group>";
+		};
+		A65EC6992BC57A0F00A794A0 /* Movies Cache */ = {
+			isa = PBXGroup;
+			children = (
+				A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */,
 			);
 			path = "Movies Cache";
 			sourceTree = "<group>";
@@ -261,6 +272,7 @@
 				A63064A22BC012410004A1CD /* Movie.swift in Sources */,
 				A63064AE2BC031710004A1CD /* HTTPClient.swift in Sources */,
 				A63064AC2BC02A460004A1CD /* MoviesMapper.swift in Sources */,
+				A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */,
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
 				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
 				A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */,
