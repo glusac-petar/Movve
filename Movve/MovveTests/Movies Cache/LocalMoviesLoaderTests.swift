@@ -22,7 +22,10 @@ class LocalMoviesLoader {
             guard let self = self else { return }
             
             if error == nil {
-                self.store.insert(movies, timestamp: self.currentDate(), completion: completion)
+                self.store.insert(movies, timestamp: self.currentDate()) { [weak self] error in
+                    guard self != nil else { return }
+                    completion(error)
+                }
             } else {
                 completion(error)
             }
@@ -113,6 +116,20 @@ final class LocalMoviesLoaderTests: XCTestCase {
         
         sut = nil
         store.completeDeletion(with: anyNSError())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
+    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated() {
+        let store = MoviesStoreSpy()
+        var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults: [Error?] = []
+        sut?.save([uniqueMovie()]) { receivedResults.append($0) }
+        
+        store.completeDeletionSuccessfully()
+        sut = nil
+        store.completeInsertion(with: anyNSError())
         
         XCTAssertTrue(receivedResults.isEmpty)
     }
