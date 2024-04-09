@@ -29,13 +29,17 @@ class LocalMoviesLoader {
 class MoviesStore {
     typealias DeletionCompletion = (Error?) -> Void
     
-    var deleteCachedMoviesCallCount = 0
-    var insertions: [(movies: [Movie], timestamp: Date)] = []
-    
     private var deletionCompletions: [DeletionCompletion] = []
     
+    private(set) var receivedMessages: [ReceivedMessage] = []
+    
+    enum ReceivedMessage: Equatable {
+        case deleteCache
+        case insert([Movie], Date)
+    }
+    
     func deleteCachedMovies(completion: @escaping DeletionCompletion) {
-        deleteCachedMoviesCallCount += 1
+        receivedMessages.append(.deleteCache)
         deletionCompletions.append(completion)
     }
     
@@ -48,15 +52,15 @@ class MoviesStore {
     }
     
     func insert(_ movies: [Movie], timestamp: Date) {
-        insertions.append((movies, timestamp))
+        receivedMessages.append(.insert(movies, timestamp))
     }
 }
 
 final class LocalMoviesLoaderTests: XCTestCase {
-    func test_init_doesNotDeleteCache() {
+    func test_init_doesNotMessageStore() {
         let (_, store) = makeSUT()
         
-        XCTAssertEqual(store.deleteCachedMoviesCallCount, 0)
+        XCTAssertEqual(store.receivedMessages, [])
     }
     
     func test_save_requestsCacheDeletion() {
@@ -65,7 +69,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         
         sut.save(movies)
         
-        XCTAssertEqual(store.deleteCachedMoviesCallCount, 1)
+        XCTAssertEqual(store.receivedMessages, [.deleteCache])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
@@ -76,7 +80,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         sut.save(movies)
         store.completeDeletion(with: deletionError)
         
-        XCTAssertEqual(store.insertions.count, 0)
+        XCTAssertEqual(store.receivedMessages, [.deleteCache])
     }
     
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
@@ -87,9 +91,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         sut.save(movies)
         store.completeDeletionSuccessfuly()
         
-        XCTAssertEqual(store.insertions.count, 1)
-        XCTAssertEqual(store.insertions.first?.movies, movies)
-        XCTAssertEqual(store.insertions.first?.timestamp, timestamp)
+        XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(movies, timestamp)])
     }
     
     // MARK: - Helper
