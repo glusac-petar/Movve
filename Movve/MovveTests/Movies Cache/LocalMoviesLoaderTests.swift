@@ -17,18 +17,23 @@ class LocalMoviesLoader {
         self.currentDate = currentDate
     }
     
-    func save(_ movies: [Movie], completion: @escaping (Error?) -> Void) {
+    func save(_ movies: [Movie], with completion: @escaping (Error?) -> Void) {
         store.deleteCachedMovies { [weak self] deletionError in
             guard let self = self else { return }
             
             if let deletionError = deletionError {
                 completion(deletionError)
             } else {
-                self.store.insert(movies, timestamp: self.currentDate()) { [weak self] error in
-                    guard self != nil else { return }
-                    completion(error)
-                }
+                self.cache(movies, with: completion)
             }
+        }
+    }
+    
+    private func cache(_ movies: [Movie], with completion: @escaping (Error?) -> Void) {
+        store.insert(movies, timestamp: currentDate()) { [weak self] error in
+            guard self != nil else { return }
+            
+            completion(error)
         }
     }
 }
