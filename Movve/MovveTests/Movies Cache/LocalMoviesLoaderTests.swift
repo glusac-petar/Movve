@@ -19,9 +19,10 @@ class LocalMoviesLoader {
     
     func save(_ movies: [Movie], completion: @escaping (Error?) -> Void) {
         store.deleteCachedMovies { [unowned self] error in
-            completion(error)
             if error == nil {
-                self.store.insert(movies, timestamp: self.currentDate())
+                self.store.insert(movies, timestamp: self.currentDate(), completion: completion)
+            } else {
+                completion(error)
             }
         }
     }
@@ -29,8 +30,10 @@ class LocalMoviesLoader {
 
 class MoviesStore {
     typealias DeletionCompletion = (Error?) -> Void
+    typealias InsertionCompletion = (Error?) -> Void
     
     private var deletionCompletions: [DeletionCompletion] = []
+    private var insertionCompletions: [InsertionCompletion] = []
     
     private(set) var receivedMessages: [ReceivedMessage] = []
     
@@ -52,8 +55,13 @@ class MoviesStore {
         deletionCompletions[index](nil)
     }
     
-    func insert(_ movies: [Movie], timestamp: Date) {
+    func insert(_ movies: [Movie], timestamp: Date, completion: @escaping (Error?) -> Void) {
         receivedMessages.append(.insert(movies, timestamp))
+        insertionCompletions.append(completion)
+    }
+    
+    func completeInsertion(with error: NSError, at index: Int = 0) {
+        insertionCompletions[index](error)
     }
 }
 
@@ -111,6 +119,25 @@ final class LocalMoviesLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         
         XCTAssertEqual(receivedError as? NSError, deletionError)
+    }
+    
+    func test_save_failsOnInsertionError() {
+        let (sut, store) = makeSUT()
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let insertionError = anyNSError()
+        let exp = expectation(description: "Wait for completion")
+        
+        var receivedError: Error?
+        sut.save(movies) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        
+        store.completeDeletionSuccessfuly()
+        store.completeInsertion(with: insertionError)
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(receivedError as? NSError, insertionError)
     }
     
     // MARK: - Helper
