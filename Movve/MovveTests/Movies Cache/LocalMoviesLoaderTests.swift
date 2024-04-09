@@ -17,8 +17,9 @@ class LocalMoviesLoader {
         self.currentDate = currentDate
     }
     
-    func save(_ movies: [Movie]) {
+    func save(_ movies: [Movie], completion: @escaping (Error?) -> Void) {
         store.deleteCachedMovies { [unowned self] error in
+            completion(error)
             if error == nil {
                 self.store.insert(movies, timestamp: self.currentDate())
             }
@@ -67,7 +68,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let (sut, store) = makeSUT()
         let movies = [uniqueMovie(), uniqueMovie()]
         
-        sut.save(movies)
+        sut.save(movies) { _ in }
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache])
     }
@@ -77,7 +78,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let movies = [uniqueMovie(), uniqueMovie()]
         let deletionError = anyNSError()
         
-        sut.save(movies)
+        sut.save(movies) { _ in }
         store.completeDeletion(with: deletionError)
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache])
@@ -88,10 +89,28 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let timestamp = Date()
         let (sut, store) = makeSUT(currentDate: { timestamp })
         
-        sut.save(movies)
+        sut.save(movies) { _ in }
         store.completeDeletionSuccessfuly()
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(movies, timestamp)])
+    }
+    
+    func test_save_failsOnDeletionError() {
+        let (sut, store) = makeSUT()
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let deletionError = anyNSError()
+        let exp = expectation(description: "Wait for completion")
+        
+        var receivedError: Error?
+        sut.save(movies) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        
+        store.completeDeletion(with: deletionError)
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(receivedError as? NSError, deletionError)
     }
     
     // MARK: - Helper
