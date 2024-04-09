@@ -12,12 +12,14 @@ class LocalMoviesLoader {
     private let store: MoviesStore
     private let currentDate: () -> Date
     
+    typealias SaveResult = Error?
+    
     init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
     
-    func save(_ movies: [Movie], with completion: @escaping (Error?) -> Void) {
+    func save(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedMovies { [weak self] deletionError in
             guard let self = self else { return }
             
@@ -29,7 +31,7 @@ class LocalMoviesLoader {
         }
     }
     
-    private func cache(_ movies: [Movie], with completion: @escaping (Error?) -> Void) {
+    private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
         store.insert(movies, timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }
             
@@ -116,7 +118,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let store = MoviesStoreSpy()
         var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
         
-        var receivedResults: [Error?] = []
+        var receivedResults: [LocalMoviesLoader.SaveResult] = []
         sut?.save([uniqueMovie()]) { receivedResults.append($0) }
         
         sut = nil
@@ -129,7 +131,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let store = MoviesStoreSpy()
         var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
         
-        var receivedResults: [Error?] = []
+        var receivedResults: [LocalMoviesLoader.SaveResult] = []
         sut?.save([uniqueMovie()]) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
