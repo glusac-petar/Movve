@@ -51,7 +51,7 @@ class MoviesStore {
         deletionCompletions[index](error)
     }
     
-    func completeDeletionSuccessfuly(at index: Int = 0) {
+    func completeDeletionSuccessfully(at index: Int = 0) {
         deletionCompletions[index](nil)
     }
     
@@ -64,7 +64,7 @@ class MoviesStore {
         insertionCompletions[index](error)
     }
     
-    func completeInsertionSuccessfuly(at index: Int = 0) {
+    func completeInsertionSuccessfully(at index: Int = 0) {
         insertionCompletions[index](nil)
     }
 }
@@ -102,7 +102,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let (sut, store) = makeSUT(currentDate: { timestamp })
         
         sut.save(movies) { _ in }
-        store.completeDeletionSuccessfuly()
+        store.completeDeletionSuccessfully()
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(movies, timestamp)])
     }
@@ -121,7 +121,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let insertionError = anyNSError()
         
         expect(sut, toCompleteWithError: insertionError, when: {
-            store.completeDeletionSuccessfuly()
+            store.completeDeletionSuccessfully()
             store.completeInsertion(with: insertionError)
         })
     }
@@ -130,8 +130,8 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         expect(sut, toCompleteWithError: nil, when: {
-            store.completeDeletionSuccessfuly()
-            store.completeInsertionSuccessfuly()
+            store.completeDeletionSuccessfully()
+            store.completeInsertionSuccessfully()
         })
     }
     
