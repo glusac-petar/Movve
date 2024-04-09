@@ -10,15 +10,17 @@ import Movve
 
 class LocalMoviesLoader {
     private let store: MoviesStore
+    private let currentDate: () -> Date
     
-    init(store: MoviesStore) {
+    init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
+        self.currentDate = currentDate
     }
     
     func save(_ movies: [Movie]) {
         store.deleteCachedMovies { [unowned self] error in
             if error == nil {
-                self.store.insert(movies)
+                self.store.insert(movies, timestamp: self.currentDate())
             }
         }
     }
@@ -29,6 +31,7 @@ class MoviesStore {
     
     var deleteCachedMoviesCallCount = 0
     var insertCallCount = 0
+    var insertions: [(movies: [Movie], timestamp: Date)] = []
     
     private var deletionCompletions: [DeletionCompletion] = []
     
@@ -45,8 +48,9 @@ class MoviesStore {
         deletionCompletions[index](nil)
     }
     
-    func insert(_ movies: [Movie]) {
+    func insert(_ movies: [Movie], timestamp: Date) {
         insertCallCount += 1
+        insertions.append((movies, timestamp))
     }
 }
 
@@ -87,11 +91,24 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertEqual(store.insertCallCount, 1)
     }
     
+    func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let timestamp = Date()
+        let (sut, store) = makeSUT(currentDate: { timestamp })
+        
+        sut.save(movies)
+        store.completeDeletionSuccessfuly()
+        
+        XCTAssertEqual(store.insertions.count, 1)
+        XCTAssertEqual(store.insertions.first?.movies, movies)
+        XCTAssertEqual(store.insertions.first?.timestamp, timestamp)
+    }
+    
     // MARK: - Helper
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStore) {
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStore) {
         let store = MoviesStore()
-        let sut = LocalMoviesLoader(store: store)
+        let sut = LocalMoviesLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
