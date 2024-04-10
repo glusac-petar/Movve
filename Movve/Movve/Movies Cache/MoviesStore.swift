@@ -12,5 +12,15 @@ public protocol MoviesStore {
     typealias InsertionCompletion = (Error?) -> Void
     
     func deleteCachedMovies(completion: @escaping DeletionCompletion)
-    func insert(_ movies: [Movie], timestamp: Date, completion: @escaping InsertionCompletion)
+    func insert(_ movies: [LocalMovie], timestamp: Date, completion: @escaping InsertionCompletion)
+}
+
+public struct LocalMovie: Equatable {
+    public let id: Int
+    public let imagePath: String
+    
+    public init(id: Int, imagePath: String) {
+        self.id = id
+        self.imagePath = imagePath
+    }
 }

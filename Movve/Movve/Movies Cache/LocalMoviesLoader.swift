@@ -31,10 +31,16 @@ public final class LocalMoviesLoader {
     }
     
     private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(movies, timestamp: currentDate()) { [weak self] error in
+        store.insert(movies.toLocal(), timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }
             
             completion(error)
         }
+    }
+}
+
+extension Array where Element == Movie {
+    func toLocal() -> [LocalMovie] {
+        return map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
     }
 }

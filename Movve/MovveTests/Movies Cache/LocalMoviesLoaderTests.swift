@@ -37,13 +37,14 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
         let movies = [uniqueMovie(), uniqueMovie()]
+        let localMovies = movies.map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
         let timestamp = Date()
         let (sut, store) = makeSUT(currentDate: { timestamp })
         
         sut.save(movies) { _ in }
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(movies, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(localMovies, timestamp)])
     }
     
     func test_save_failsOnDeletionError() {
@@ -129,7 +130,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         
         enum ReceivedMessage: Equatable {
             case deleteCache
-            case insert([Movie], Date)
+            case insert([LocalMovie], Date)
         }
         
         func deleteCachedMovies(completion: @escaping DeletionCompletion) {
@@ -145,7 +146,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
             deletionCompletions[index](nil)
         }
         
-        func insert(_ movies: [Movie], timestamp: Date, completion: @escaping InsertionCompletion) {
+        func insert(_ movies: [LocalMovie], timestamp: Date, completion: @escaping InsertionCompletion) {
             receivedMessages.append(.insert(movies, timestamp))
             insertionCompletions.append(completion)
         }
