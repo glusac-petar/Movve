@@ -20,6 +20,7 @@
 		A65EC6982BC561ED00A794A0 /* LocalMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */; };
 		A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */; };
 		A65EC69D2BC57A7700A794A0 /* MoviesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */; };
+		A6D3A4AE2BC73E6E00B9B159 /* LocalMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6D3A4AD2BC73E6E00B9B159 /* LocalMovie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoaderTests.swift; sourceTree = "<group>"; };
 		A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoader.swift; sourceTree = "<group>"; };
 		A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesStore.swift; sourceTree = "<group>"; };
+		A6D3A4AD2BC73E6E00B9B159 /* LocalMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMovie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 			children = (
 				A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */,
 				A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */,
+				A6D3A4AD2BC73E6E00B9B159 /* LocalMovie.swift */,
 			);
 			path = "Movies Cache";
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				A63064A42BC012670004A1CD /* MoviesLoader.swift in Sources */,
 				A63064AA2BC017A10004A1CD /* RemoteMoviesLoader.swift in Sources */,
 				A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */,
+				A6D3A4AE2BC73E6E00B9B159 /* LocalMovie.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
