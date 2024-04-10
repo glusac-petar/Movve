@@ -17,34 +17,31 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     func test_save_requestsCacheDeletion() {
         let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
         
-        sut.save(movies) { _ in }
+        sut.save(uniqueMovies().models) { _ in }
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
         let (sut, store) = makeSUT()
-        let movies = [uniqueMovie(), uniqueMovie()]
         let deletionError = anyNSError()
         
-        sut.save(movies) { _ in }
+        sut.save(uniqueMovies().models) { _ in }
         store.completeDeletion(with: deletionError)
         
         XCTAssertEqual(store.receivedMessages, [.deleteCache])
     }
     
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
-        let movies = [uniqueMovie(), uniqueMovie()]
-        let localMovies = movies.map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
+        let movies = uniqueMovies()
         let timestamp = Date()
         let (sut, store) = makeSUT(currentDate: { timestamp })
         
-        sut.save(movies) { _ in }
+        sut.save(movies.models) { _ in }
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(localMovies, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCache, .insert(movies.local, timestamp)])
     }
     
     func test_save_failsOnDeletionError() {
@@ -80,7 +77,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
         
         var receivedResults: [LocalMoviesLoader.SaveResult] = []
-        sut?.save([uniqueMovie()]) { receivedResults.append($0) }
+        sut?.save(uniqueMovies().models) { receivedResults.append($0) }
         
         sut = nil
         store.completeDeletion(with: anyNSError())
@@ -93,7 +90,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
         
         var receivedResults: [LocalMoviesLoader.SaveResult] = []
-        sut?.save([uniqueMovie()]) { receivedResults.append($0) }
+        sut?.save(uniqueMovies().models) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
         sut = nil
@@ -114,7 +111,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     private func expect(_ sut: LocalMoviesLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
-        sut.save([uniqueMovie()]) { error in
+        sut.save(uniqueMovies().models) { error in
             XCTAssertEqual(error as? NSError, expectedError, file: file, line: line)
             exp.fulfill()
         }
@@ -162,6 +159,12 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     private func uniqueMovie() -> Movie {
         return Movie(id: 0, imagePath: UUID().uuidString)
+    }
+    
+    private func uniqueMovies() -> (models: [Movie], local: [LocalMovie]) {
+        let movies = [uniqueMovie(), uniqueMovie()]
+        let local = movies.map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
+        return (movies, local)
     }
     
     private func anyNSError() -> NSError {
