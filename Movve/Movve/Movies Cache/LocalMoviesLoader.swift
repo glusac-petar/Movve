@@ -39,7 +39,7 @@ public final class LocalMoviesLoader {
     }
 }
 
-extension Array where Element == Movie {
+private extension Array where Element == Movie {
     func toLocal() -> [LocalMovie] {
         return map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
     }
