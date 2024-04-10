@@ -29,10 +29,30 @@ public final class RemoteMoviesLoader: MoviesLoader {
             
             switch result {
             case let .success((data, response)):
-                completion(MoviesMapper.map(data, response))
+                completion(RemoteMoviesLoader.map(data, response))
             case .failure:
                 completion(.failure(Error.connectivity))
             }
+        }
+    }
+    
+    private static func map(_ data: Data, _ response: HTTPURLResponse) -> Result {
+        do {
+            let movies = try MoviesMapper.map(data, response)
+            return .success(movies.toModels())
+        } catch {
+            return .failure(error)
+        }
+    }
+}
+
+private extension Array where Element == RemoteMovie {
+    func toModels() -> [Movie] {
+        return compactMap { item -> Movie? in
+            if let imagePath = item.posterPath {
+                return Movie(id: item.id, imagePath: imagePath)
+            }
+            return nil
         }
     }
 }
