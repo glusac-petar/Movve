@@ -7,11 +7,6 @@
 
 import Foundation
 
-struct RemoteMovie: Decodable {
-    let id: Int
-    let posterPath: String?
-}
-
 final class MoviesMapper {
     private struct Root: Decodable {
         let results: [RemoteMovie]
