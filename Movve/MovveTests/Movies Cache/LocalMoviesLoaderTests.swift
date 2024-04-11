@@ -131,6 +131,26 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertEqual(receivedError as? NSError, retrievalError)
     }
     
+    func test_load_deliversNoMoviesOnEmptyCache() {
+        let (sut, store) = makeSUT()
+        let exp = expectation(description: "Wait for completion")
+        
+        var receivedMovies: [Movie]?
+        sut.load { result in
+            switch result {
+            case let .success(movies):
+                receivedMovies = movies
+            default:
+                XCTFail("Expected success with no movies, got \(result) instead.")
+            }
+            exp.fulfill()
+        }
+        store.completeRetrievalWithEmptyCache()
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(receivedMovies, [])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
@@ -197,6 +217,10 @@ final class LocalMoviesLoaderTests: XCTestCase {
         
         func completeRetrieval(with error: Error, at index: Int = 0) {
             retrievalCompletions[index](error)
+        }
+        
+        func completeRetrievalWithEmptyCache(at index: Int = 0) {
+            retrievalCompletions[index](nil)
         }
     }
     
