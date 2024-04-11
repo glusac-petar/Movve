@@ -12,6 +12,7 @@ public final class LocalMoviesLoader {
     private let currentDate: () -> Date
     
     public typealias SaveResult = Error?
+    public typealias LoadResult = Result<[Movie], Error>
     
     public init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -30,8 +31,12 @@ public final class LocalMoviesLoader {
         }
     }
     
-    public func load(completion: @escaping (Error?) -> Void) {
-        store.retrieve(completion: completion)
+    public func load(completion: @escaping (LoadResult) -> Void) {
+        store.retrieve { error in
+            if let error = error {
+                completion(.failure(error))
+            }
+        }
     }
     
     private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {

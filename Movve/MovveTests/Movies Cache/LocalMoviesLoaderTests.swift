@@ -116,8 +116,13 @@ final class LocalMoviesLoaderTests: XCTestCase {
         let exp = expectation(description: "Wait for completion")
         
         var receivedError: Error?
-        sut.load { error in
-            receivedError = error
+        sut.load { result in
+            switch result {
+            case let .failure(error):
+                receivedError = error
+            default:
+                XCTFail("Expected failure with \(retrievalError), got \(result) instead.")
+            }
             exp.fulfill()
         }
         store.completeRetrieval(with: retrievalError)
