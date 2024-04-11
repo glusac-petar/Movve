@@ -30,8 +30,8 @@ public final class LocalMoviesLoader {
         }
     }
     
-    public func load() {
-        store.retrieve()
+    public func load(completion: @escaping (Error?) -> Void) {
+        store.retrieve(completion: completion)
     }
     
     private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {

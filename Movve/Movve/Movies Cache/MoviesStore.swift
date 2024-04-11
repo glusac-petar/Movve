@@ -10,8 +10,9 @@ import Foundation
 public protocol MoviesStore {
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
+    typealias RetrievalCompletion = (Error?) -> Void
     
     func deleteCachedMovies(completion: @escaping DeletionCompletion)
     func insert(_ movies: [LocalMovie], timestamp: Date, completion: @escaping InsertionCompletion)
-    func retrieve()
+    func retrieve(completion: @escaping RetrievalCompletion)
 }
