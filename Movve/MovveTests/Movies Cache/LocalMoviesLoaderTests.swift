@@ -138,6 +138,17 @@ final class LocalMoviesLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversNoMoviesOnSevenDaysOldCache() {
+        let fixedCurrentDate = Date()
+        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        let movies = uniqueMovies()
+        
+        expect(sut, toCompleteWith: .success([]), when: {
+            store.completeRetrieval(with: movies.local, timestamp: sevenDaysOldTimestamp)
+        })
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
