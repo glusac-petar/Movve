@@ -32,10 +32,13 @@ public final class LocalMoviesLoader {
     }
     
     public func load(completion: @escaping (LoadResult) -> Void) {
-        store.retrieve { error in
-            if let error = error {
+        store.retrieve { result in
+            switch result {
+            case let .failure(error):
                 completion(.failure(error))
-            } else {
+            case let .found(movies: movies, timestamp: _):
+                completion(.success(movies.toModels()))
+            case .empty:
                 completion(.success([]))
             }
         }
@@ -53,5 +56,11 @@ public final class LocalMoviesLoader {
 private extension Array where Element == Movie {
     func toLocal() -> [LocalMovie] {
         return map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
+    }
+}
+
+private extension Array where Element == LocalMovie {
+    func toModels() -> [Movie] {
+        return map { Movie(id: $0.id, imagePath: $0.imagePath) }
     }
 }

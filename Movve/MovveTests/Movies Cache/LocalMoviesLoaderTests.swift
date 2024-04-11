@@ -127,6 +127,17 @@ final class LocalMoviesLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversMoviesOnLessThanSevenDaysOldCache() {
+        let fixedCurrentDate = Date()
+        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        let movies = uniqueMovies()
+        
+        expect(sut, toCompleteWith: .success(movies.models), when: {
+            store.completeRetrieval(with: movies.local, timestamp: lessThanSevenDaysOldTimestamp)
+        })
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
@@ -209,11 +220,15 @@ final class LocalMoviesLoaderTests: XCTestCase {
         }
         
         func completeRetrieval(with error: Error, at index: Int = 0) {
-            retrievalCompletions[index](error)
+            retrievalCompletions[index](.failure(error))
         }
         
         func completeRetrievalWithEmptyCache(at index: Int = 0) {
-            retrievalCompletions[index](nil)
+            retrievalCompletions[index](.empty)
+        }
+        
+        func completeRetrieval(with movies: [LocalMovie], timestamp: Date, at index: Int = 0) {
+            retrievalCompletions[index](.found(movies: movies, timestamp: timestamp))
         }
     }
     
@@ -229,5 +244,15 @@ final class LocalMoviesLoaderTests: XCTestCase {
     
     private func anyNSError() -> NSError {
         return NSError(domain: "any-error", code: 1)
+    }
+}
+
+private extension Date {
+    func adding(days: Int) -> Date {
+        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: TimeInterval) -> Date {
+        return self + seconds
     }
 }
