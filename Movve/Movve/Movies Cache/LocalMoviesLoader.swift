@@ -30,6 +30,10 @@ public final class LocalMoviesLoader {
         }
     }
     
+    public func load() {
+        store.retrieve()
+    }
+    
     private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
         store.insert(movies.toLocal(), timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }

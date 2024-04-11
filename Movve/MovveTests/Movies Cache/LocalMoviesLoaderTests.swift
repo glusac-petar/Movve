@@ -9,6 +9,7 @@ import XCTest
 import Movve
 
 final class LocalMoviesLoaderTests: XCTestCase {
+    // MARK: - Save
     func test_init_doesNotMessageStore() {
         let (_, store) = makeSUT()
         
@@ -99,6 +100,16 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertTrue(receivedResults.isEmpty)
     }
     
+    // MARK: - Load
+    
+    func test_load_requestsCacheRetrieval() {
+        let (sut, store) = makeSUT()
+        
+        sut.load()
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
@@ -128,6 +139,7 @@ final class LocalMoviesLoaderTests: XCTestCase {
         enum ReceivedMessage: Equatable {
             case deleteCache
             case insert([LocalMovie], Date)
+            case retrieve
         }
         
         func deleteCachedMovies(completion: @escaping DeletionCompletion) {
@@ -154,6 +166,10 @@ final class LocalMoviesLoaderTests: XCTestCase {
         
         func completeInsertionSuccessfully(at index: Int = 0) {
             insertionCompletions[index](nil)
+        }
+        
+        func retrieve() {
+            receivedMessages.append(.retrieve)
         }
     }
     
