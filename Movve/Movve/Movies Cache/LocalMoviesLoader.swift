@@ -36,7 +36,9 @@ public final class LocalMoviesLoader {
         store.retrieve { [unowned self] result in
             switch result {
             case let .failure(error):
+                store.deleteCachedMovies { _ in }
                 completion(.failure(error))
+                
             case let .found(movies: movies, timestamp: timestamp) where validate(timestamp):
                 completion(.success(movies.toModels()))
             case .found, .empty:
