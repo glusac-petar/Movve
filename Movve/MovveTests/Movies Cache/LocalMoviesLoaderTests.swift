@@ -202,6 +202,18 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
     }
     
+    func test_load_deletesMoreThanSevenDaysOldCache() {
+        let fixedCurrentDate = Date()
+        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        let movies = uniqueMovies()
+        
+        sut.load { _ in }
+        store.completeRetrieval(with: movies.local, timestamp: moreThanSevenDaysOldTimestamp)
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
