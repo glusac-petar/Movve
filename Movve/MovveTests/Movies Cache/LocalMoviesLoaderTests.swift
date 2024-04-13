@@ -214,6 +214,19 @@ final class LocalMoviesLoaderTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
     }
     
+    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let store = MoviesStoreSpy()
+        var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults: [LocalMoviesLoader.LoadResult] = []
+        sut?.load { receivedResults.append($0) }
+        
+        sut = nil
+        store.completeRetrievalWithEmptyCache()
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
