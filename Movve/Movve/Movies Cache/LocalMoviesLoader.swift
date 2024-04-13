@@ -42,7 +42,11 @@ public final class LocalMoviesLoader {
             case let .found(movies: movies, timestamp: timestamp) where validate(timestamp):
                 completion(.success(movies.toModels()))
                 
-            case .found, .empty:
+            case .found:
+                store.deleteCachedMovies { _ in }
+                completion(.success([]))
+                
+            case .empty:
                 completion(.success([]))
             }
         }
