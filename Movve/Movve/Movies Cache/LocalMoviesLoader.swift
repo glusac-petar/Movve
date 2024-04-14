@@ -12,13 +12,21 @@ public final class LocalMoviesLoader {
     private let currentDate: () -> Date
     private let calendar = Calendar(identifier: .gregorian)
     
-    public typealias SaveResult = Error?
-    public typealias LoadResult = Result<[Movie], Error>
-    
     public init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
+    
+    private func validate(_ timestamp: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
+            return false
+        }
+        return currentDate() < maxCacheAge
+    }
+}
+
+extension LocalMoviesLoader {
+    public typealias SaveResult = Error?
     
     public func save(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedMovies { [weak self] error in
@@ -31,6 +39,18 @@ public final class LocalMoviesLoader {
             }
         }
     }
+    
+    private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
+        store.insert(movies.toLocal(), timestamp: currentDate()) { [weak self] error in
+            guard self != nil else { return }
+            
+            completion(error)
+        }
+    }
+}
+    
+extension LocalMoviesLoader {
+    public typealias LoadResult = Result<[Movie], Error>
     
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
@@ -51,7 +71,9 @@ public final class LocalMoviesLoader {
             }
         }
     }
-    
+}
+ 
+extension LocalMoviesLoader {
     public func validateCache() {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
@@ -66,22 +88,6 @@ public final class LocalMoviesLoader {
             case .found, .empty:
                 break
             }
-        }
-    }
-    
-    private func validate(_ timestamp: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
-            return false
-        }
-        return currentDate() < maxCacheAge
-
-    }
-    
-    private func cache(_ movies: [Movie], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(movies.toLocal(), timestamp: currentDate()) { [weak self] error in
-            guard self != nil else { return }
-            
-            completion(error)
         }
     }
 }
