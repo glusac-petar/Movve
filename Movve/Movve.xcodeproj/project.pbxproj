@@ -17,9 +17,10 @@
 		A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */; };
 		A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */; };
 		A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */; };
-		A65EC6982BC561ED00A794A0 /* LocalMoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */; };
+		A65EC6982BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */; };
 		A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */; };
 		A65EC69D2BC57A7700A794A0 /* MoviesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */; };
+		A66479892BCC828B000D5754 /* CacheMoviesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66479882BCC828B000D5754 /* CacheMoviesUseCaseTests.swift */; };
 		A6D3A4AE2BC73E6E00B9B159 /* LocalMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6D3A4AD2BC73E6E00B9B159 /* LocalMovie.swift */; };
 		A6D3A4B02BC7407100B9B159 /* RemoteMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6D3A4AF2BC7407100B9B159 /* RemoteMovie.swift */; };
 /* End PBXBuildFile section */
@@ -47,9 +48,10 @@
 		A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
-		A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoaderTests.swift; sourceTree = "<group>"; };
+		A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoviesFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoader.swift; sourceTree = "<group>"; };
 		A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesStore.swift; sourceTree = "<group>"; };
+		A66479882BCC828B000D5754 /* CacheMoviesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheMoviesUseCaseTests.swift; sourceTree = "<group>"; };
 		A6D3A4AD2BC73E6E00B9B159 /* LocalMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMovie.swift; sourceTree = "<group>"; };
 		A6D3A4AF2BC7407100B9B159 /* RemoteMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,7 +155,8 @@
 		A65EC6942BC561B800A794A0 /* Movies Cache */ = {
 			isa = PBXGroup;
 			children = (
-				A65EC6972BC561ED00A794A0 /* LocalMoviesLoaderTests.swift */,
+				A66479882BCC828B000D5754 /* CacheMoviesUseCaseTests.swift */,
+				A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */,
 			);
 			path = "Movies Cache";
 			sourceTree = "<group>";
@@ -298,7 +301,8 @@
 				A63064A72BC012CC0004A1CD /* RemoteMoviesLoaderTests.swift in Sources */,
 				A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */,
 				A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */,
-				A65EC6982BC561ED00A794A0 /* LocalMoviesLoaderTests.swift in Sources */,
+				A66479892BCC828B000D5754 /* CacheMoviesUseCaseTests.swift in Sources */,
+				A65EC6982BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
