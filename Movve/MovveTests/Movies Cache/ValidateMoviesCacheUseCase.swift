@@ -15,6 +15,15 @@ final class ValidateMoviesCacheUseCase: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [])
     }
     
+    func test_validateCache_deletesCacheOnRetrievalError() {
+        let (sut, store) = makeSUT(currentDate: Date.init)
+        
+        sut.validateCache()
+        store.completeRetrieval(with: anyNSError())
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
@@ -80,5 +89,9 @@ final class ValidateMoviesCacheUseCase: XCTestCase {
         func completeRetrieval(with movies: [LocalMovie], timestamp: Date, at index: Int = 0) {
             retrievalCompletions[index](.found(movies: movies, timestamp: timestamp))
         }
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any-error", code: 1)
     }
 }

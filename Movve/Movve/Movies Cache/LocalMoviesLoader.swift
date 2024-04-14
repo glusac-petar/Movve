@@ -38,7 +38,6 @@ public final class LocalMoviesLoader {
             
             switch result {
             case let .failure(error):
-                store.deleteCachedMovies { _ in }
                 completion(.failure(error))
                 
             case let .found(movies: movies, timestamp: timestamp) where validate(timestamp):
@@ -52,6 +51,11 @@ public final class LocalMoviesLoader {
                 completion(.success([]))
             }
         }
+    }
+    
+    public func validateCache() {
+        store.retrieve { _ in }
+        store.deleteCachedMovies { _ in }
     }
     
     private func validate(_ timestamp: Date) -> Bool {
