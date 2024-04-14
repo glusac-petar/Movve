@@ -49,7 +49,7 @@ extension LocalMoviesLoader {
     }
 }
     
-extension LocalMoviesLoader {
+extension LocalMoviesLoader: MoviesLoader {
     public typealias LoadResult = Result<[Movie], Error>
     
     public func load(completion: @escaping (LoadResult) -> Void) {
