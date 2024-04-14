@@ -44,7 +44,6 @@ public final class LocalMoviesLoader {
                 completion(.success(movies.toModels()))
                 
             case .found:
-                store.deleteCachedMovies { _ in }
                 completion(.success([]))
                 
             case .empty:
@@ -58,7 +57,11 @@ public final class LocalMoviesLoader {
             switch result {
             case .failure:
                 store.deleteCachedMovies { _ in }
-            default:
+                
+            case let .found(movies: _, timestamp: timestamp) where !validate(timestamp):
+                store.deleteCachedMovies { _ in }
+            
+            case .found, .empty:
                 break
             }
         }
