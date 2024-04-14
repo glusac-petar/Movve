@@ -82,7 +82,7 @@ final class LoadMoviesFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesNotDeleteCacheOnEmptyCache() {
+    func test_load_hasNoSideEffectsOnEmptyCache() {
         let (sut, store) = makeSUT(currentDate: Date.init)
         
         sut.load { _ in }

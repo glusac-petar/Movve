@@ -24,6 +24,15 @@ final class ValidateMoviesCacheUseCase: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
     }
     
+    func test_validateCache_doesNotDeleteCacheOnEmptyCache() {
+        let (sut, store) = makeSUT(currentDate: Date.init)
+        
+        sut.validateCache()
+        store.completeRetrievalWithEmptyCache()
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {

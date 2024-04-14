@@ -54,8 +54,14 @@ public final class LocalMoviesLoader {
     }
     
     public func validateCache() {
-        store.retrieve { _ in }
-        store.deleteCachedMovies { _ in }
+        store.retrieve { [unowned self] result in
+            switch result {
+            case .failure:
+                store.deleteCachedMovies { _ in }
+            default:
+                break
+            }
+        }
     }
     
     private func validate(_ timestamp: Date) -> Bool {
