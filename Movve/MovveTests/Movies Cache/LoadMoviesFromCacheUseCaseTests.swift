@@ -166,28 +166,4 @@ final class LoadMoviesFromCacheUseCaseTests: XCTestCase {
         action()
         wait(for: [exp], timeout: 1.0)
     }
-    
-    private func uniqueMovie() -> Movie {
-        return Movie(id: 0, imagePath: UUID().uuidString)
-    }
-    
-    private func uniqueMovies() -> (models: [Movie], local: [LocalMovie]) {
-        let movies = [uniqueMovie(), uniqueMovie()]
-        let local = movies.map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
-        return (movies, local)
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "any-error", code: 1)
-    }
-}
-
-private extension Date {
-    func adding(days: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
-    }
-    
-    func adding(seconds: TimeInterval) -> Date {
-        return self + seconds
-    }
 }

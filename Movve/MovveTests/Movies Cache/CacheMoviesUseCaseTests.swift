@@ -98,7 +98,7 @@ final class CacheMoviesUseCaseTests: XCTestCase {
         
         XCTAssertTrue(receivedResults.isEmpty)
     }
-
+    
     // MARK: - Helper
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalMoviesLoader, store: MoviesStoreSpy) {
@@ -117,19 +117,5 @@ final class CacheMoviesUseCaseTests: XCTestCase {
         }
         action()
         wait(for: [exp], timeout: 1.0)
-    }
-    
-    private func uniqueMovie() -> Movie {
-        return Movie(id: 0, imagePath: UUID().uuidString)
-    }
-    
-    private func uniqueMovies() -> (models: [Movie], local: [LocalMovie]) {
-        let movies = [uniqueMovie(), uniqueMovie()]
-        let local = movies.map { LocalMovie(id: $0.id, imagePath: $0.imagePath) }
-        return (movies, local)
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "any-error", code: 1)
     }
 }

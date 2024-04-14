@@ -138,10 +138,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
     
-    private func anyNSError() -> NSError {
-        return NSError(domain: "any-error", code: 1)
-    }
-    
     private final class URLProtocolStub: URLProtocol {
         private static var stub: Stub?
         private static var requestObserver: ((URLRequest) -> Void)?
