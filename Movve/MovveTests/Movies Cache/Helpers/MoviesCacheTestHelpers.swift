@@ -19,6 +19,14 @@ func uniqueMovies() -> (models: [Movie], local: [LocalMovie]) {
 }
 
 extension Date {
+    func minusMoviesCacheMaxAge() -> Date {
+        return adding(days: -moviesCacheMaxAgeInDays)
+    }
+    
+    private var moviesCacheMaxAgeInDays: Int {
+        return 7
+    }
+    
     func adding(days: Int) -> Date {
         return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
     }

@@ -33,45 +33,45 @@ final class ValidateMoviesCacheUseCase: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_validateCache_doesNotDeleteLessThanSevenDaysOldCache() {
+    func test_validateCache_doesNotDeleteNonExpiredCache() {
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let nonExpiredTimestamp = fixedCurrentDate.minusMoviesCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let movies = uniqueMovies()
         
         sut.validateCache()
-        store.completeRetrieval(with: movies.local, timestamp: lessThanSevenDaysOldTimestamp)
+        store.completeRetrieval(with: movies.local, timestamp: nonExpiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_validateCache_deletesSevenDaysOldCache() {
+    func test_validateCache_deletesCacheOnExpiration() {
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+        let expirationTimestamp = fixedCurrentDate.minusMoviesCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let movies = uniqueMovies()
         
         sut.validateCache()
-        store.completeRetrieval(with: movies.local, timestamp: sevenDaysOldTimestamp)
+        store.completeRetrieval(with: movies.local, timestamp: expirationTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
     }
     
-    func test_validateCache_deletesMoreThanSevenDaysOldCache() {
+    func test_validateCache_deletesExpiredCache() {
         let fixedCurrentDate = Date()
-        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let expiredTimestamp = fixedCurrentDate.minusMoviesCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let movies = uniqueMovies()
         
         sut.validateCache()
-        store.completeRetrieval(with: movies.local, timestamp: moreThanSevenDaysOldTimestamp)
+        store.completeRetrieval(with: movies.local, timestamp: expiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCache])
     }
     
     func test_validateCache_doesNotDeleteCacheAfterSUTInstanceHasBeenDeallocated() {
         let fixedCurrentDate = Date()
-        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.minusMoviesCacheMaxAge().adding(seconds: -1)
         let store = MoviesStoreSpy()
         var sut: LocalMoviesLoader? = LocalMoviesLoader(store: store, currentDate: { fixedCurrentDate })
         let movies = uniqueMovies()
