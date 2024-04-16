@@ -8,34 +8,28 @@
 import Foundation
 
 private final class MoviesCachePolicy {
-    private let currentDate: () -> Date
     private let calendar = Calendar(identifier: .gregorian)
-    
-    init(currentDate: @escaping () -> Date) {
-        self.currentDate = currentDate
-    }
     
     private var maxCacheAgeInDays: Int {
         return 7
     }
     
-    func validate(_ timestamp: Date) -> Bool {
+    func validate(_ timestamp: Date, against date: Date) -> Bool {
         guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
             return false
         }
-        return currentDate() < maxCacheAge
+        return date < maxCacheAge
     }
 }
 
 public final class LocalMoviesLoader {
     private let store: MoviesStore
     private let currentDate: () -> Date
-    private let moviesCachePolicy: MoviesCachePolicy
+    private let moviesCachePolicy: MoviesCachePolicy = MoviesCachePolicy()
     
     public init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
-        self.moviesCachePolicy = MoviesCachePolicy(currentDate: currentDate)
     }
 }
 
@@ -74,7 +68,7 @@ extension LocalMoviesLoader: MoviesLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(movies: movies, timestamp: timestamp) where moviesCachePolicy.validate(timestamp):
+            case let .found(movies: movies, timestamp: timestamp) where moviesCachePolicy.validate(timestamp, against: currentDate()):
                 completion(.success(movies.toModels()))
                 
             case .found, .empty:
@@ -93,7 +87,7 @@ extension LocalMoviesLoader {
             case .failure:
                 store.deleteCachedMovies { _ in }
                 
-            case let .found(movies: _, timestamp: timestamp) where !moviesCachePolicy.validate(timestamp):
+            case let .found(movies: _, timestamp: timestamp) where !moviesCachePolicy.validate(timestamp, against: currentDate()):
                 store.deleteCachedMovies { _ in }
             
             case .found, .empty:
