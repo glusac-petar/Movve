@@ -7,21 +7,35 @@
 
 import Foundation
 
-public final class LocalMoviesLoader {
-    private let store: MoviesStore
+private final class MoviesCachePolicy {
     private let currentDate: () -> Date
     private let calendar = Calendar(identifier: .gregorian)
     
-    public init(store: MoviesStore, currentDate: @escaping () -> Date) {
-        self.store = store
+    init(currentDate: @escaping () -> Date) {
         self.currentDate = currentDate
     }
     
-    private func validate(_ timestamp: Date) -> Bool {
+    private var maxCacheAgeInDays: Int {
+        return 7
+    }
+    
+    func validate(_ timestamp: Date) -> Bool {
         guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
             return false
         }
         return currentDate() < maxCacheAge
+    }
+}
+
+public final class LocalMoviesLoader {
+    private let store: MoviesStore
+    private let currentDate: () -> Date
+    private let moviesCachePolicy: MoviesCachePolicy
+    
+    public init(store: MoviesStore, currentDate: @escaping () -> Date) {
+        self.store = store
+        self.currentDate = currentDate
+        self.moviesCachePolicy = MoviesCachePolicy(currentDate: currentDate)
     }
 }
 
@@ -60,7 +74,7 @@ extension LocalMoviesLoader: MoviesLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(movies: movies, timestamp: timestamp) where validate(timestamp):
+            case let .found(movies: movies, timestamp: timestamp) where moviesCachePolicy.validate(timestamp):
                 completion(.success(movies.toModels()))
                 
             case .found, .empty:
@@ -79,7 +93,7 @@ extension LocalMoviesLoader {
             case .failure:
                 store.deleteCachedMovies { _ in }
                 
-            case let .found(movies: _, timestamp: timestamp) where !validate(timestamp):
+            case let .found(movies: _, timestamp: timestamp) where !moviesCachePolicy.validate(timestamp):
                 store.deleteCachedMovies { _ in }
             
             case .found, .empty:
