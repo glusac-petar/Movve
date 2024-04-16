@@ -8,14 +8,16 @@
 import Foundation
 
 private final class MoviesCachePolicy {
-    private let calendar = Calendar(identifier: .gregorian)
+    private init() {}
     
-    private var maxCacheAgeInDays: Int {
+    private static let calendar = Calendar(identifier: .gregorian)
+    
+    private static var maxCacheAgeInDays: Int {
         return 7
     }
     
-    func validate(_ timestamp: Date, against date: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
+    static func validate(_ timestamp: Date, against date: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {
             return false
         }
         return date < maxCacheAge
@@ -25,7 +27,6 @@ private final class MoviesCachePolicy {
 public final class LocalMoviesLoader {
     private let store: MoviesStore
     private let currentDate: () -> Date
-    private let moviesCachePolicy: MoviesCachePolicy = MoviesCachePolicy()
     
     public init(store: MoviesStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -68,7 +69,7 @@ extension LocalMoviesLoader: MoviesLoader {
             case let .failure(error):
                 completion(.failure(error))
                 
-            case let .found(movies: movies, timestamp: timestamp) where moviesCachePolicy.validate(timestamp, against: currentDate()):
+            case let .found(movies: movies, timestamp: timestamp) where MoviesCachePolicy.validate(timestamp, against: currentDate()):
                 completion(.success(movies.toModels()))
                 
             case .found, .empty:
@@ -87,7 +88,7 @@ extension LocalMoviesLoader {
             case .failure:
                 store.deleteCachedMovies { _ in }
                 
-            case let .found(movies: _, timestamp: timestamp) where !moviesCachePolicy.validate(timestamp, against: currentDate()):
+            case let .found(movies: _, timestamp: timestamp) where !MoviesCachePolicy.validate(timestamp, against: currentDate()):
                 store.deleteCachedMovies { _ in }
             
             case .found, .empty:
