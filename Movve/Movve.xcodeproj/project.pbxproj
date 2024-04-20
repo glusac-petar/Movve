@@ -17,6 +17,7 @@
 		A635B21A2BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */; };
 		A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */; };
 		A6462BB02BC348EB0094570D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */; };
+		A65439612BD4684E001EFD32 /* CodableMoviesStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65439602BD4684E001EFD32 /* CodableMoviesStoreTests.swift */; };
 		A65EC6982BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */; };
 		A65EC69B2BC57A1C00A794A0 /* LocalMoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */; };
 		A65EC69D2BC57A7700A794A0 /* MoviesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */; };
@@ -53,6 +54,7 @@
 		A635B2192BC1ED6D008FE79A /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		A6462BAD2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		A6462BAF2BC348EB0094570D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		A65439602BD4684E001EFD32 /* CodableMoviesStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableMoviesStoreTests.swift; sourceTree = "<group>"; };
 		A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoviesFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		A65EC69A2BC57A1C00A794A0 /* LocalMoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMoviesLoader.swift; sourceTree = "<group>"; };
 		A65EC69C2BC57A7700A794A0 /* MoviesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesStore.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				A66479882BCC828B000D5754 /* CacheMoviesUseCaseTests.swift */,
 				A65EC6972BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift */,
 				A664798A2BCC8403000D5754 /* ValidateMoviesCacheUseCase.swift */,
+				A65439602BD4684E001EFD32 /* CodableMoviesStoreTests.swift */,
 			);
 			path = "Movies Cache";
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				A6462BAE2BC3477C0094570D /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				A66479922BCC8953000D5754 /* SharedTestHelpers.swift in Sources */,
 				A664798E2BCC8832000D5754 /* MoviesStoreSpy.swift in Sources */,
+				A65439612BD4684E001EFD32 /* CodableMoviesStoreTests.swift in Sources */,
 				A66479892BCC828B000D5754 /* CacheMoviesUseCaseTests.swift in Sources */,
 				A65EC6982BC561ED00A794A0 /* LoadMoviesFromCacheUseCaseTests.swift in Sources */,
 			);
