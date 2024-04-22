@@ -11,9 +11,27 @@ import Movve
 class CodableMoviesStore {
     private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
     
+    private struct CodableMovie: Codable {
+        private let id: Int
+        private let imagePath: String
+        
+        init(_ movie: LocalMovie) {
+            id = movie.id
+            imagePath = movie.imagePath
+        }
+        
+        var local: LocalMovie {
+            return LocalMovie(id: id, imagePath: imagePath)
+        }
+    }
+    
     private struct Cache: Codable {
-        let movies: [LocalMovie]
+        let movies: [CodableMovie]
         let timestamp: Date
+        
+        var localMovies: [LocalMovie] {
+            return movies.map { $0.local }
+        }
     }
     
     func retrieve(completion: @escaping MoviesStore.RetrievalCompletion) {
@@ -24,12 +42,12 @@ class CodableMoviesStore {
         
         let decoder = JSONDecoder()
         let decoded = try! decoder.decode(Cache.self, from: data)
-        completion(.found(movies: decoded.movies, timestamp: decoded.timestamp))
+        completion(.found(movies: decoded.localMovies ,timestamp: decoded.timestamp))
     }
     
     func insert(_ movies: [LocalMovie], timestamp: Date, completion: @escaping MoviesStore.InsertionCompletion) {
         let encoder = JSONEncoder()
-        let encoded = try! encoder.encode(Cache(movies: movies, timestamp: timestamp))
+        let encoded = try! encoder.encode(Cache(movies: movies.map(CodableMovie.init), timestamp: timestamp))
         try! encoded.write(to: storeURL)
         completion(nil)
     }
