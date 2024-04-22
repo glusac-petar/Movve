@@ -16,7 +16,7 @@ class CodableMoviesStore {
 
 final class CodableMoviesStoreTests: XCTestCase {
     func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = CodableMoviesStore()
+        let sut = makeSUT()
         let exp = expectation(description: "Wait for retrieval")
         
         sut.retrieve { result in
@@ -33,7 +33,7 @@ final class CodableMoviesStoreTests: XCTestCase {
     }
     
     func test_retrieve_hasNoSideEffectsOnEmptyCache() {
-        let sut = CodableMoviesStore()
+        let sut = makeSUT()
         let exp = expectation(description: "Wait for retrieval")
         
         sut.retrieve { firstResult in
@@ -49,5 +49,11 @@ final class CodableMoviesStoreTests: XCTestCase {
         }
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    // MARK: - Helpers
+    
+    func makeSUT() -> CodableMoviesStore {
+        return CodableMoviesStore()
     }
 }
