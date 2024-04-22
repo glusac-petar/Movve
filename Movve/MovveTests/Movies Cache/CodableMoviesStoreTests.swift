@@ -9,12 +9,45 @@ import XCTest
 import Movve
 
 class CodableMoviesStore {
+    private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
+    
+    private struct Cache: Codable {
+        let movies: [LocalMovie]
+        let timestamp: Date
+    }
+    
     func retrieve(completion: @escaping MoviesStore.RetrievalCompletion) {
-        completion(.empty)
+        guard let data = try? Data(contentsOf: storeURL) else {
+            completion(.empty)
+            return
+        }
+        
+        let decoder = JSONDecoder()
+        let decoded = try! decoder.decode(Cache.self, from: data)
+        completion(.found(movies: decoded.movies, timestamp: decoded.timestamp))
+    }
+    
+    func insert(_ movies: [LocalMovie], timestamp: Date, completion: @escaping MoviesStore.InsertionCompletion) {
+        let encoder = JSONEncoder()
+        let encoded = try! encoder.encode(Cache(movies: movies, timestamp: timestamp))
+        try! encoded.write(to: storeURL)
+        completion(nil)
     }
 }
 
 final class CodableMoviesStoreTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
+        try? FileManager.default.removeItem(at: storeURL)
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
+        try? FileManager.default.removeItem(at: storeURL)
+    }
+    
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
         let exp = expectation(description: "Wait for retrieval")
@@ -43,6 +76,30 @@ final class CodableMoviesStoreTests: XCTestCase {
                     break
                 default:
                     XCTFail("Expected retrieving twice from empty cache to deliver same empty result, got \(firstResult) and \(secondResult) instead")
+                }
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues() {
+        let sut = makeSUT()
+        let movies = uniqueMovies().local
+        let timestamp = Date()
+        let exp = expectation(description: "Wait for retrieval")
+        
+        sut.insert(movies, timestamp: timestamp) { insertionError in
+            XCTAssertNil(insertionError)
+            
+            sut.retrieve { retrievedResult in
+                switch retrievedResult {
+                case let .found(movies: retrievedMovies, timestamp: retrievedTimestamp):
+                    XCTAssertEqual(retrievedMovies, movies)
+                    XCTAssertEqual(retrievedTimestamp, timestamp)
+                default:
+                    XCTFail("Expected found result with movies \(movies) and timestamp \(timestamp), got \(retrievedResult) instead")
                 }
                 exp.fulfill()
             }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LocalMovie: Equatable {
+public struct LocalMovie: Equatable, Codable {
     public let id: Int
     public let imagePath: String
     
