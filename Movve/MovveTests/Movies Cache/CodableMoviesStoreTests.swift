@@ -53,7 +53,9 @@ final class CodableMoviesStoreTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeSUT() -> CodableMoviesStore {
-        return CodableMoviesStore()
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableMoviesStore {
+        let sut = CodableMoviesStore()
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
     }
 }
