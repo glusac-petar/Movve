@@ -9,7 +9,11 @@ import XCTest
 import Movve
 
 class CodableMoviesStore {
-    private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
+    private let storeURL: URL
+    
+    init(storeURL: URL) {
+        self.storeURL = storeURL
+    }
     
     private struct CodableMovie: Codable {
         private let id: Int
@@ -129,7 +133,8 @@ final class CodableMoviesStoreTests: XCTestCase {
     // MARK: - Helpers
     
     func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableMoviesStore {
-        let sut = CodableMoviesStore()
+        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("movies.store")
+        let sut = CodableMoviesStore(storeURL: storeURL)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
